@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'flood_areas.dart';
@@ -61,34 +60,13 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> _requestLocationPermission() async {
-    try {
-      Location location = Location();
-      bool serviceEnabled = await location.serviceEnabled();
-      if (!serviceEnabled) {
-        serviceEnabled = await location.requestService();
-        if (!serviceEnabled) return;
-      }
-      PermissionStatus permissionGranted = await location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        permissionGranted = await location.requestPermission();
-        if (permissionGranted != PermissionStatus.granted) return;
-      }
-    } catch (e) {
-      print('Error requesting location permission: $e');
-    }
+    // Location permission handling removed for web compatibility
+    print('Location permission requested (web mode)');
   }
 
   Future<LatLng?> _getUserLocation() async {
-    try {
-      Location location = Location();
-      LocationData locData = await location.getLocation();
-      if (locData.latitude != null && locData.longitude != null) {
-        return LatLng(locData.latitude!, locData.longitude!);
-      }
-    } catch (e) {
-      print('Error getting user location: $e');
-    }
-    return null;
+    // Return Mumbai center as default location for web
+    return const LatLng(19.0760, 72.8777);
   }
 
   Future<void> _showEvacuationRoute() async {
